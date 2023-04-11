@@ -1,6 +1,7 @@
 package com.bbang.store;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,18 +43,23 @@ public class StoreController {
 		return "store/list";
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String storeListReload(String sid, Model model) {
+	@PostMapping("/list")
+	public String storeListReload(@RequestParam int page, Model model) {
 
-		// List<Store> list = storeService.getAllStoreList();
+		//1.페이지 변수를 찍어보자. 
+		System.out.println(page);
+	   
+	    int offset = (page - 1) * 20;
 
-		List<Store> list = sqlsessionTemplate.selectList("store.select_add_list", sid);
+	    List<Store> storeList = sqlsessionTemplate.selectList("store.select_add_list", 
+	        Collections.singletonMap("offset", offset));
 
-		model.addAttribute("storeList", list);
-		System.out.println(sid);
+	    model.addAttribute("storeList", storeList);
 
-		return "store/list";
+	    return "store/list";
 	}
+
+
 
 	@GetMapping("/detail")
 	public String storeDetail(@RequestParam("sid") String sid, Model model) {
@@ -150,5 +156,7 @@ public class StoreController {
 		return "redirect:/store/list" ;
 
 	}
+	
+	
 
 }

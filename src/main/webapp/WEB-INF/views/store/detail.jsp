@@ -35,14 +35,14 @@ img {
 			<h5 class="card-title">${store.stel}</h5>
 			<br> <br> <br>
 
-			<choose>
-				<when test="${store.sphoto2 != null}">
+			<c:choose>
+				<c:when test="${store.sphoto2 != null}">
 					<img src="<c:url value="/resources/save_image/${store.sphoto2}"/>" alt="사진" > 
-				</when>
-				<otherwise>
+				</c:when>
+				<c:otherwise>
 					<img src="${store.sphoto}" alt="사진" >
-				</otherwise>
-			</choose>
+				</c:otherwise>
+			</c:choose>
 			
 			
 

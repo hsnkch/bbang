@@ -1,5 +1,6 @@
 package com.bbang.store;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +42,10 @@ public class StoreRepositoryImpl implements StoreRepository {
 		sqlsessionTemplate.update("store.update", map) ;		
 		
 	}
+
+	
+
+
+	
 
 }

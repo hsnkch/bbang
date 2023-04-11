@@ -12,7 +12,7 @@
 		]]>
 	</insert>
 
-	<update id="update" parameterType="hashMap" >
+	<update id="update" parameterType="hashMap">
 		<![CDATA[ 
 			 UPDATE store 
         	 SET sname = #{sname}, 
@@ -27,41 +27,44 @@
 
 	</update>
 
-	<select id="select_list"   resultType="com.bbang.store.Store"> 
+	<select id="select_list" resultType="com.bbang.store.Store"> 
 		<![CDATA[ 
 			SELECT * 
 			FROM store 
 			WHERE sid > 0
 			ORDER BY sid
-			LIMIT 0, 10
+			LIMIT 0 ,20
 		 ]]>
 	</select>
-	<select id="select_add_list"  parameterType="String" resultType="com.bbang.store.Store"> 
-		<![CDATA[ 
-			SELECT * 
-			FROM store 
-			WHERE sid > #{sid}
+	<select id="select_add_list" parameterType="hashMap" resultType="com.bbang.store.Store"> 
+			<![CDATA[
+			SELECT *
+			FROM store
+			WHERE sid > 0
 			ORDER BY sid
-			LIMIT 0, 10
-		 ]]>
+			LIMIT 20 OFFSET #{offset}
+			]]>
 	</select>
 
 
-	<select id="select_detail" parameterType="String" resultType="com.bbang.store.Store"> 
+
+
+	<select id="select_detail" parameterType="String"
+		resultType="com.bbang.store.Store"> 
 		<![CDATA[ 
 			SELECT * 
 			FROM store 
 			WHERE sid = #{sid} 
 		 ]]>
 	</select>
-	
-	<delete id="delete" parameterType="String" >
+
+	<delete id="delete" parameterType="String">
 		<![CDATA[ 
 			DELETE 
 			FROM store 
 			WHERE sid = #{sid} 
 		 ]]>
-	
+
 	</delete>
 
 </mapper>
