@@ -1,6 +1,5 @@
 package com.spring.board;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -58,9 +56,9 @@ public class BoardController {
 		model.addAttribute("board", boardById);
 		
 		// 답변 게시물
-				List<Board> list = boardService.getReplyById(bid);
+				List<Comment> list = boardService.getReplyById(bid);
 				int cnt = list.size();
-				model.addAttribute("replyList",list);
+				model.addAttribute("commentList",list);
 				model.addAttribute("cnt", cnt);
 				
 				// 폼을 띄우기 전에 조회수 하나 증가
@@ -74,17 +72,20 @@ public class BoardController {
 		
 		return "boards/board";
 	}
-	
 	@ResponseBody
 	@PostMapping("/replynew")
 	public void replynew(@RequestParam Map<String, Object> map) {
 		
-		String rpid = (String)map.get("rpwriter");
-		String bpid = (String)map.get("bpwriter");
+		System.out.println("컨트롤러로 넘어오나??");
+		
+		
+		System.out.println(map.get("bid"));
+		System.out.println(map.get("ccontent"));
+		System.out.println(map.get("cwriter"));
+
 
 		boardService.replynewBoard(map);
 
-		System.out.println(bpid);
 	}
 	
 	@ResponseBody

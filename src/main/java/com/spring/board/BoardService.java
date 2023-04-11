@@ -13,7 +13,7 @@ public interface BoardService {
 	
 	void replynewBoard(Map<String, Object> map);	//댓글 등록
 	
-	List<Board> getReplyById(String bid);	//댓글 목록
+	List<Comment> getReplyById(String bid);	//댓글 목록
 	
 	void checkBoard(Map map);	//조회수
 	

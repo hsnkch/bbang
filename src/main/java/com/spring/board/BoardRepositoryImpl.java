@@ -39,7 +39,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	
 	
-	public List<Board> getReplyById(String bid) {
+	public List<Comment> getReplyById(String bid) {
 		return this.sqlSessionTemplate.selectList("board.select_reply", bid);
 	}
 	

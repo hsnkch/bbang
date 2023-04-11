@@ -35,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
 //		boardRepository.replynewBoard(board);
 //	}
 	
-	public List<Board> getReplyById(String bid) {
+	public List<Comment> getReplyById(String bid) {
 		return boardRepository.getReplyById(bid);
 	}
 	
