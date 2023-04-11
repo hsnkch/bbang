@@ -1,12 +1,14 @@
 package com.bbang.store;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +22,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bbang.review.Review;
 import com.bbang.review.ReviewService;
 
-import lombok.RequiredArgsConstructor;
-
 @Controller
 @RequestMapping("/store")
-@RequiredArgsConstructor
 public class StoreController {
-	private final StoreService storeService;
-	private final ReviewService reviewService;
-	private final SqlSessionTemplate sqlsessionTemplate;
+
+	@Autowired // DI
+	private StoreService storeService;
+	
+	@Autowired
+	ReviewService reviewService;
+
+	@Autowired // DI
+	SqlSessionTemplate sqlsessionTemplate;
 	
 	@GetMapping("/main")
 	public String main() {
@@ -45,28 +50,32 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String storeListReload(String sid, Model model) {
+	public String storeListReload(@RequestParam int page, Model model) {
 
-		// List<Store> list = storeService.getAllStoreList();
+		//1.페이지 변수를 찍어보자. 
+		System.out.println(page);
+	   
+	    int offset = (page - 1) * 20;
 
-		List<Store> list = sqlsessionTemplate.selectList("store.select_add_list", sid);
+	    List<Store> storeList = sqlsessionTemplate.selectList("store.select_add_list", 
+	        Collections.singletonMap("offset", offset));
 
-		model.addAttribute("storeList", list);
-		System.out.println(sid);
+	    model.addAttribute("storeList", storeList);
 
-		return "store/list";
+	    return "store/list";
 	}
 
 	@GetMapping("/detail")
 	public String storeDetail(@RequestParam("sid") String sid, Model model) {
 
 		System.out.println(sid);
-		
 		Store storeById = storeService.getStoreById(sid);
 		model.addAttribute("store", storeById);
 		
-		List<Review> reviewById = reviewService.getReviewById(sid);
+	//	List<Review> reviewById = ReviewService.getReviewById(sid);
+		List<Review> reviewById = sqlsessionTemplate.selectList("review.review_list_by_sid", sid);
 		model.addAttribute("reviewList", reviewById);
+		
 
 		return "store/detail";
 
@@ -174,7 +183,7 @@ public class StoreController {
 		System.out.println(map.get("area2"));
 		System.out.println(map.get("area3"));
 
-		List<Store> areaList = storeService.getAreaList(map);
+		 List<Store> areaList = storeService.getAreaList(map);
 		
         // 조회한 데이터를 Model에 담아 View로 전달
         model.addAttribute("areaList", areaList);
