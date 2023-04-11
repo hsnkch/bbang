@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -160,5 +161,31 @@ public class BoardController {
 	return mav;  
 
    }
+    
+    //댓글 삭제
+    @PostMapping("/deletereply") 
+	public ModelAndView deleteReply(@RequestParam String cid, @RequestParam String bid) {  
+    	
+    	System.out.println(cid);
+    	System.out.println(bid);
+
+	boardService.deleteReply(cid);
+
+	ModelAndView mav = new ModelAndView("redirect:/boards/board?bid=" + bid);  
+	
+	return mav;  
+
+   }
+    
+    //댓글 수정
+    
+    @RequestMapping(value = "/updatereply", method = RequestMethod.POST)
+    public void updateReviewAjax(@RequestParam("cid") String cid, @RequestParam("ccontent") String ccontent) {
+        System.out.println("컨트롤러 연결 확인");
+        System.out.println("cid : " + cid);
+        System.out.println("ccontent : " + ccontent);
+        // boardService.updateReply(map);
+    }
+
     
 }

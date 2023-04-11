@@ -22,4 +22,8 @@ public interface BoardService {
 	// int deleteBoard(String bid);	
 
 	void deleteBoard(Map<String, Object> map);	//게시물 삭제
+
+	void deleteReply(String cid);	//댓글 삭제
+
+	void updateReply(Map<String, Object> map);	//댓글 수정
 }

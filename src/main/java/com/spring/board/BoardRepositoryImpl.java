@@ -29,7 +29,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	public void replynewBoard(Map<String, Object> map) {
-		this.sqlSessionTemplate.insert("board.insert_reply", map);
+		this.sqlSessionTemplate.insert("board.insert_comment", map);
 	}
 	
 //	@Override
@@ -67,6 +67,26 @@ public class BoardRepositoryImpl implements BoardRepository {
 	@Override
 	public void deleteBoard(Map<String, Object> map) {
 		this.sqlSessionTemplate.delete("board.delete", map);
+		
+	}
+
+	
+
+	@Override
+	public void deleteReply(String cid) {
+		this.sqlSessionTemplate.delete("board.delete_review", cid);			
+	}
+
+	
+
+//	@Override
+//	public void updateReply(String cid) {
+//		sqlSessionTemplate.update("board.update_review", cid) ;
+//	}
+
+	@Override
+	public void updateReply(Map<String, Object> map) {
+		sqlSessionTemplate.update("board.update_review", map) ;
 		
 	}
 

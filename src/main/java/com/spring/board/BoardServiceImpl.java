@@ -59,5 +59,22 @@ public class BoardServiceImpl implements BoardService {
 		
 	}
 
+	
+
+	@Override
+	public void deleteReply(String cid) {
+		 boardRepository.deleteReply(cid);		
+	}
+	
+//	@Override
+//	public void updateReply(String cid) {
+//		boardRepository.updateReply(cid);
+//	}
+
+	@Override
+	public void updateReply(Map<String, Object> map) {
+		boardRepository.updateReply(map);		
+	}
+
 
 }

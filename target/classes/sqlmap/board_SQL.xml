@@ -41,23 +41,23 @@
 		]]>
 	</select>
 
-	<insert id="insert_reply" parameterType="hashMap"
+	<insert id="insert_comment" parameterType="hashMap"
 		useGeneratedKeys="true" keyProperty="cid">
 		<![CDATA[
-			INSERT INTO comment
+			INSERT comment
 			(bid, ccontent, cwriter)
 			values
 			(#{bid}, #{ccontent}, #{cwriter})
 		]]>
 	</insert>
 
-	<update id="update_view" parameterType="hashMap">
+	 <update id="update_view" parameterType="hashMap">
 			<![CDATA[
 				UPDATE comment 
 				SET ccontent = #{ccontent}
 				WHERE cid = #{cid}
 			]]>
-	</update>
+	</update> 
 
 	<delete id="delete_review" parameterType="String">
 			<![CDATA[
@@ -81,4 +81,13 @@
 				WHERE bid = #{bid}
 			]]>
 	</delete>
+	
+	<update id="update_review" parameterType="hashMap">
+		<![CDATA[
+			 UPDATE comment 
+        	 SET ccontent = #{ccontent}, 
+       		 WHERE bid = #{bid} 
+		]]>
+
+	</update>
 </mapper>
