@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ page session="false"%>
-
-
 <html>
 <head>
 <meta charset="utf-8">
@@ -49,9 +46,9 @@
 <!-- Modernizr JS -->
 <script src="/resources/js/modernizr-2.6.2.min.js"></script>
 <!-- jQuery -->
-	<script src="/resources/js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
-	<script src="/resources/js/jquery.easing.1.3.js"></script>
+<script src="/resources/js/jquery.min.js"></script>
+<!-- jQuery Easing -->
+<script src="/resources/js/jquery.easing.1.3.js"></script>
 <!-- FOR IE9 below -->
 <!--[if lt IE 9]>
 	<script src="/resources/js/respond.min.js"></script>
@@ -82,7 +79,27 @@
 							</ul></li>
 						<li><a href="#">자유게시판</a></li>
 						<li><a href="#">사이트소개</a></li>
-						<li class="btn-cta"><a href="/login"><span>Login</span></a></li>
+						
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<li class="btn-cta"><a href="/admin/list"><span>회원목록</span></a></li>
+						</sec:authorize>
+
+						<sec:authorize access="hasRole('ROLE_USER')">
+							<li class="btn-cta"><a href="/user/myEdit"><span>마이페이지</span></a></li>
+						</sec:authorize>
+
+						<sec:authorize access="isAuthenticated()">
+							<li class="btn-cta"><button id="logout">
+									<span>로그아웃</span>
+								</button></li>
+						</sec:authorize>
+
+						<sec:authorize access="!isAuthenticated()">
+							<li class="btn-cta"><a href="/login"><span>로그인</span></a>
+							<li class="btn-cta">
+							<li class="btn-cta"><a href="/join"><span>회원가입</span></a>
+							<li class="btn-cta">
+						</sec:authorize>
 					</ul>
 				</div>
 			</div>
@@ -147,8 +164,6 @@
 			</div>
 
 
-			<script src="/resources/js/area.js"></script>
-			
 			<div class="row">
 				<!-- 강남 -->
 				<div class="col-lg-3 col-md-4 col-sm-6" onclick="areaGangNam()">
@@ -179,7 +194,7 @@
 						</figure>
 						<div class="fh5co-text">
 							<p>
-								<span class="price cursive-font" >강서</span>
+								<span class="price cursive-font">강서</span>
 							</p>
 						</div>
 					</div>
@@ -233,111 +248,133 @@
 		<script type="text/javascript"
 			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53ca7ba233962018a7a8996d89d2622a&libraries=services"></script>
 		<script>
-		var listData = [];
-		
-/* 		$(document).ready(function() {
-			  $.ajax({
-				    type: "GET",
-				    url: "/",
-				    dataType: "json",
-				    success: function(response) {
-				        $.each(response, function(index, item) {
-				            listData.push([item.saddr]);
-				        });
-				    },
-				    error: function() {
-				        console.log("Error while getting data");
-				    }
+			var listData = [];
+
+			/* 		$(document).ready(function() {
+			 $.ajax({
+			 type: "GET",
+			 url: "/",
+			 dataType: "json",
+			 success: function(response) {
+			 $.each(response, function(index, item) {
+			 listData.push([item.saddr]);
+			 });
+			 },
+			 error: function() {
+			 console.log("Error while getting data");
+			 }
+			 });
+			 });
+			 */
+			<c:forEach items="${storeList}" var="store">
+			listData.push([ "${store.saddr}", "${store.sname}" ]);
+			</c:forEach>
+			/* console.log(listData) */
+
+			// 맵을 넣을 div
+			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+			mapOption = {
+				center : new kakao.maps.LatLng(37.561, 126.986), // 지도의 중심좌표
+				level : 6
+			// 지도의 확대 레벨 
+			};
+
+			var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+			// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+			if (navigator.geolocation) {
+
+				// GeoLocation을 이용해서 접속 위치를 얻어옵니다
+				navigator.geolocation.getCurrentPosition(function(position) {
+
+					var lat = position.coords.latitude, // 위도
+					lon = position.coords.longitude; // 경도
+
+					// 지도 중심좌표를 접속위치로 변경합니다
+					map.setCenter(new kakao.maps.LatLng(lat, lon));
+
 				});
-		    });
-		   */
-		<c:forEach items="${storeList}" var="store">
-	        listData.push(["${store.saddr}","${store.sname}"]);
-	    </c:forEach>   
-	    /* console.log(listData) */
 
-    // 맵을 넣을 div
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = { 
-        center: new kakao.maps.LatLng(37.561, 126.986), // 지도의 중심좌표
-        level: 6 // 지도의 확대 레벨 
-    }; 
+			}
 
-var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+			// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+			var mapTypeControl = new kakao.maps.MapTypeControl();
+			map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
-// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
-if (navigator.geolocation) {
-    
-    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-    navigator.geolocation.getCurrentPosition(function(position) {
-        
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
-        
-       // 지도 중심좌표를 접속위치로 변경합니다
-    		map.setCenter(new kakao.maps.LatLng(lat, lon));
-            
-      });
-    
-} 
+			// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+			var zoomControl = new kakao.maps.ZoomControl();
+			map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-    // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-    var mapTypeControl = new kakao.maps.MapTypeControl();
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+			// 주소 -> 좌표 변환 라이브러리        
+			var geocoder = new daum.maps.services.Geocoder();
 
-    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-    var zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+			// foreach loop
+			listData
+					.forEach(function(addr, index) {
+						geocoder
+								.addressSearch(
+										addr[0],
+										function(result, status) {
+											if (status === daum.maps.services.Status.OK) {
+												var coords = new daum.maps.LatLng(
+														result[0].y,
+														result[0].x);
 
-    // 주소 -> 좌표 변환 라이브러리        
-    var geocoder = new daum.maps.services.Geocoder();
-    
-    // foreach loop
-    listData.forEach(function(addr, index) {
-        geocoder.addressSearch(addr[0], function(result, status) {
-            if (status === daum.maps.services.Status.OK) {
-                var coords = new daum.maps.LatLng(result[0].y, result[0].x);
-    
-                var marker = new daum.maps.Marker({
-                    position: coords,
-                    clickable: true
-                });
-    
-                // 마커를 지도에 표시합니다.
-                marker.setMap(map);
+												var marker = new daum.maps.Marker(
+														{
+															position : coords,
+															clickable : true
+														});
 
-                // 인포윈도우를 생성합니다
-                var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="width:150px;text-align:center;padding:6px 0;">' + addr[1] + '</div>',
-                });
-                    
-         /*        // 마커에 클릭이벤트를 등록합니다
-                kakao.maps.event.addListener(marker, 'click', function() {
-                      // 마커 위에 인포윈도우를 표시합니다
-                      infowindow.open(map, marker);  
-	                }); */
-                
-                kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-                kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+												// 마커를 지도에 표시합니다.
+												marker.setMap(map);
 
-            // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
-            function makeOverListener(map, marker, infowindow) {
-                return function() {
-                    infowindow.open(map, marker);
-                };
-            }
+												// 인포윈도우를 생성합니다
+												var infowindow = new kakao.maps.InfoWindow(
+														{
+															content : '<div style="width:150px;text-align:center;padding:6px 0;">'
+																	+ addr[1]
+																	+ '</div>',
+														});
 
-            // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
-            function makeOutListener(infowindow) {
-                return function() {
-                    infowindow.close();
-                };
-            }
-                
-	            } 
-	        });
-	    });
-    </script>
+												/*        // 마커에 클릭이벤트를 등록합니다
+												       kakao.maps.event.addListener(marker, 'click', function() {
+												             // 마커 위에 인포윈도우를 표시합니다
+												             infowindow.open(map, marker);  
+												           }); */
+
+												kakao.maps.event.addListener(
+														marker, 'mouseover',
+														makeOverListener(map,
+																marker,
+																infowindow));
+												kakao.maps.event
+														.addListener(
+																marker,
+																'mouseout',
+																makeOutListener(infowindow));
+
+												// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+												function makeOverListener(map,
+														marker, infowindow) {
+													return function() {
+														infowindow.open(map,
+																marker);
+													};
+												}
+
+												// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+												function makeOutListener(
+														infowindow) {
+													return function() {
+														infowindow.close();
+													};
+												}
+
+											}
+										});
+					});
+		</script>
 	</div>
 	<!-- 카카오지도 끝 -->
 
@@ -390,7 +427,7 @@ if (navigator.geolocation) {
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
 
-	
+
 	<!-- Bootstrap -->
 	<script src="/resources/js/bootstrap.min.js"></script>
 	<!-- Waypoints -->
@@ -410,9 +447,74 @@ if (navigator.geolocation) {
 	<script src="/resources/js/moment.min.js"></script>
 	<script src="/resources/js/bootstrap-datetimepicker.min.js"></script>
 
-
 	<!-- Main -->
 	<script src="/resources/js/main.js"></script>
+	
+	<script>
+		$('#logout').click(function() { //logout 버튼을 클릭하였을 때
+			$.ajax({
+				type : 'post', //post 방식으로 전송
+				url : '/logout?${_csrf.parameterName}=${_csrf.token}'
+			});
+			location.reload();
+		});
+		
+		function areaGangNam() {
+			var form = document.createElement("form");
+			form.action = "/store/areaList?${_csrf.parameterName}=${_csrf.token}";
+			form.method = "POST";
+			
+			var hiddenField = document.createElement("input");
+			hiddenField.type = "hidden";
+			hiddenField.name = "area1";
+			hiddenField.value = "강남";
+			
+			var hiddenField2 = document.createElement("input");
+			hiddenField2.type = "hidden";
+			hiddenField2.name = "area2";
+			hiddenField2.value = "서초";
+			
+			var hiddenField3 = document.createElement("input");
+			hiddenField3.type = "hidden";
+			hiddenField3.name = "area3";
+			hiddenField3.value = "송파";
+			
+			form.appendChild(hiddenField);
+			form.appendChild(hiddenField2);
+			form.appendChild(hiddenField3);
+			
+			document.body.appendChild(form);
+			form.submit();
+		}
+
+		function areaWest() {
+			var form = document.createElement("form");
+			form.action = "/store/areaList?${_csrf.parameterName}=${_csrf.token}";
+			form.method = "POST";
+			
+			var hiddenField = document.createElement("input");
+			hiddenField.type = "hidden";
+			hiddenField.name = "area1";
+			hiddenField.value = "강서";
+			
+			var hiddenField2 = document.createElement("input");
+			hiddenField2.type = "hidden";
+			hiddenField2.name = "area2";
+			hiddenField2.value = "양천";
+			
+			var hiddenField3 = document.createElement("input");
+			hiddenField3.type = "hidden";
+			hiddenField3.name = "area3";
+			hiddenField3.value = "구로";
+			
+			form.appendChild(hiddenField);
+			form.appendChild(hiddenField2);
+			form.appendChild(hiddenField3);
+			
+			document.body.appendChild(form);
+			form.submit();
+		}
+	</script>
 
 </body>
 </html>

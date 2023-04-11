@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,18 +20,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bbang.review.Review;
 import com.bbang.review.ReviewService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequestMapping("/store")
+@RequiredArgsConstructor
 public class StoreController {
-
-	@Autowired // DI
-	private StoreService storeService;
-	
-	@Autowired
-	ReviewService reviewService;
-
-	@Autowired // DI
-	SqlSessionTemplate sqlsessionTemplate;
+	private final StoreService storeService;
+	private final ReviewService reviewService;
+	private final SqlSessionTemplate sqlsessionTemplate;
 	
 	@GetMapping("/main")
 	public String main() {
@@ -65,13 +61,12 @@ public class StoreController {
 	public String storeDetail(@RequestParam("sid") String sid, Model model) {
 
 		System.out.println(sid);
+		
 		Store storeById = storeService.getStoreById(sid);
 		model.addAttribute("store", storeById);
 		
-	//	List<Review> reviewById = ReviewService.getReviewById(sid);
-		List<Review> reviewById = sqlsessionTemplate.selectList("review.review_list_by_sid", sid);
+		List<Review> reviewById = reviewService.getReviewById(sid);
 		model.addAttribute("reviewList", reviewById);
-		
 
 		return "store/detail";
 
@@ -179,7 +174,7 @@ public class StoreController {
 		System.out.println(map.get("area2"));
 		System.out.println(map.get("area3"));
 
-		 List<Store> areaList = storeService.getAreaList(map);
+		List<Store> areaList = storeService.getAreaList(map);
 		
         // 조회한 데이터를 Model에 담아 View로 전달
         model.addAttribute("areaList", areaList);
