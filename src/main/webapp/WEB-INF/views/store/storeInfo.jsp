@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 		<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -147,6 +148,104 @@
 										</div>
 									</div>
 								</div>
+=======
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page session="false"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+li {
+	list-style: none;
+}
+
+#map {
+	width: 400;
+	height: 400;
+	margin: auto;
+}
+</style>
+
+</head>
+<body>
+
+<link rel="stylesheet" href="/resources/css/bootstrap.css">
+<link rel="stylesheet" href="/resources/css/style.css">
+
+<nav class="gtco-nav" role="navigation">
+		<div class="gtco-container">
+
+			<div class="row">
+				<div class="col-sm-4 col-xs-12">
+					<div id="gtco-logo">
+						<a href="/">서울에서 배빵빵 <em>.</em></a>
+					</div>
+				</div>
+				<div class="col-xs-8 text-right menu-1">
+					<ul>
+						<li class="has-dropdown"><a href="#">맛집리스트</a>
+							<ul class="dropdown">
+								<li><a href="#">Food Catering</a></li>
+								<li><a href="#">Wedding Celebration</a></li>
+								<li><a href="#">Birthday's Celebration</a></li>
+							</ul></li>
+						<li><a href="#">자유게시판</a></li>
+						<li><a href="notices/noticelist">사이트소개</a></li>
+						<li class="btn-cta"><a href="/login"><span>Login</span></a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</nav>
+	
+	<header id="gtco-header-sub" class="gtco-cover-sub2 gtco-cover-md" data-stellar-background-ratio="0.5" style="background-position: 0% 0%;">
+	<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-center">
+
+					<div class="row row-mt-8em">
+						<div class="col-md-12 mt-text animate-box fadeInUp animated-fast" data-animate-effect="fadeInUp">
+							<h2 class="white-color" style="font-size: 60px; font-weight: bold;">사이트소개</h2>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</header>
+
+
+	<div class="gtco-section">
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12">
+					<h3>${store.sname}</h3>
+					<ul>
+						<li class="saddr">영업일 : ${store.sopen}</li>
+					</ul>
+
+					<div class="col-md-6 animate-box">
+						<ul class="smenu col-6">
+							<li>메뉴</li>
+						</ul>
+
+					</div>
+
+					<div class="col-md-5 col-md-push-1 animate-box">
+
+						<div class="gtco-contact-info">
+							<div class="text-center">
+								<h2>Contact Information</h2>
+>>>>>>> Stashed changes
 							</div>
 						</div>
 						<!-- 리뷰 등록 구역 -->
@@ -313,6 +412,7 @@
 					<br>
 					<br>
 
+<<<<<<< Updated upstream
 					<footer id="gtco-footer" role="contentinfo"
 						style="background-image: url(/resources/images/main.jpg)" data-stellar-background-ratio="0.4">
 						<div class="overlay"></div>
@@ -345,6 +445,166 @@
 						</div>
 					</footer>
 					<!-- </div> -->
+=======
+		<!-- 리뷰 게시물 -->
+
+		<c:forEach items="${reviewList}" var="r">
+			<div class="card">
+				<h5 class="card-header">${r.rscore}</h5>
+				<div class="card-body">
+					<h5 class="card-title">${r.rcontent}</h5>
+					<input type="hidden" name="rid" value="${r.rid}"> <br>
+					<br> <br>
+
+					<div class="d-flex justify-content-end badge bg-light text-dark">${r.rregdate}</div>
+					<div class="d-flex justify-content-end badge bg-light text-dark">${r.rupdate}</div>
+
+					<!-- 리뷰 부분 -->
+					<!-- // onclick 에 rid의 값을 updateModel(rid) 값을 넘겨주기 -->
+					<button type="button" class="btn btn-primary"
+						onclick="javascript:updateModel(${r.rid}, ${r.rscore}, '${r.rcontent}' )">수정모달</button>
+
+				</div>
+			</div>
+		</c:forEach>
+
+		<div class="modal review_modal" tabindex="-1">
+			<div class="modal-dialog" id="updateModal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modal-title">모달_타이틀_</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="modal-body">
+						모달_바디_부분_자동으로_정보를_가져와서_바꿀_예정</div>
+					<div class="modal-footer" id="modal-footer"></div>
+				</div>
+			</div>
+		</div>
+</body>
+
+<script type="text/javascript">
+
+//updateModel(${r.rid}, ${r.content}, ${r.rscore}) 에서 받은 값으로 modal을 띄우는 함수
+function updateModel(rid, rscore, rcontent) {
+    //모달창을 띄우자
+    $('.review_modal').modal('show');
+	var modal_title = document.getElementById("modal-title");
+	modal_title.innerHTML = "리뷰 수정";
+
+	var modal_body = document.getElementById("modal-body");
+	modal_body.innerHTML =  "<input id='rid' value= '" + rid + "' >" +
+							"<input id='rscore' value= '" + rscore + "' >" +
+							"<input id='rcontent' value= '" + rcontent + "' >" ;
+	
+	var modal_footer = document.getElementById("modal-footer");
+	modal_footer.innerHTML = "<button type='button' class='btn btn-primary' onclick='javascript:updateAjax()'>수정하기</button>"
+		+ "<button type='button' class='btn btn-primary' onclick='javascript:deleteAjax()'>삭제하기</button>"
+		+ "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>닫기</button>" ; 
+}
+
+
+	// rid 값을 받아서 수정하기 버튼을 누르면 수정페이지로 이동
+	// 버그가 터지니까 방향성 수정 -> modal_body 의 innerHTML 을 수정하자 -> id 값을 설정하기로
+	// 그렇게하면 var 변수 = document.getElementById("id값") 으로 값을 가져올 수 있다. 
+	function updateAjax() {
+		var rid = document.querySelector("#rid").value;
+		var rscore = document.querySelector("#rscore").value;
+		var rcontent = document.querySelector("#rcontent").value;
+
+		alert("rid : " + rid + ", rcontent : " + rcontent + ", rscore : " + rscore) ;
+
+		$.ajax ({
+			url : "/review/update",
+			type : "POST",
+			beforeSend : function(xhr) { /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			data : {
+				rid : rid,
+				rcontent : rcontent,
+				rscore : rscore
+			},
+			success : function(data) {
+				//페이지를 리로드하자
+				window.location.reload();
+			},
+			error : function() {
+				alert("수정_에러");
+			}
+			
+		});
+	}
+
+	function insertAjax() {
+		var sid = $('div.container input.sid').val();
+		var uid = $('div.container input.uid').val();
+		var rcontent = $('div.container input.rcontent').val();
+		var rscore = $('div.container input.rscore').val();
+
+		alert("rcontent : " + rcontent + ", rscore : " + rscore + ", uid : " + uid + ", sid : " + sid) ;
+
+
+		$.ajax ({
+			url : "/review/insert",
+			type : "POST",
+			beforeSend : function(xhr) { /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			data : {
+				sid : sid,
+				uid : uid,
+				rcontent : rcontent,
+				rscore : rscore
+			},
+			success : function(data) {
+				//페이지를 리로드하자
+				window.location.reload();
+			},
+			error : function() {
+				alert("등록_에러");
+			}
+			
+		});
+	}
+
+	
+	//rid 값을 받아서 삭제하기 버튼을 누르면 삭제페이지로 rid 값을 보내준다.
+	function deleteAjax() {
+		var rid = document.querySelector("#rid").value;	
+		alert(rid) ;
+		$.ajax ({
+			url : "/review/delete",
+			type : "POST",
+			beforeSend : function(xhr) { /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+				xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+			},
+			data : {
+				rid : rid
+			},
+			success : function(data) {
+				//페이지를 리로드하자
+				window.location.reload();
+			},
+			error : function() {
+				alert("삭제_에러");
+			}
+			
+		});
+	}
+
+
+</script>
+</div>
+
+<section class="py-5 text-center container"></section>
+<br>
+<br>
+<br>
+
+<!-- </div> -->
+>>>>>>> Stashed changes
 
 					<script type="text/javascript"
 						src="//dapi.kakao.com/v2/maps/sdk.js?appkey=53ca7ba233962018a7a8996d89d2622a&libraries=services"></script>
@@ -474,6 +734,7 @@
 
 					<div class="m"></div>
 
+<<<<<<< Updated upstream
 					<div class="gototop js-top">
 						<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 					</div>
@@ -490,8 +751,38 @@
 					<script>
 						var $j341 = jQuery.noConflict();
 					</script>
+=======
+<footer id="gtco-footer" role="contentinfo" style="background-image: url(&quot;/resources/images/main.jpg&quot;); background-position: 50% 50%;" data-stellar-background-ratio="0.4">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row row-pb-md">
 
 
+				<div class="col-md-12 text-center">
+					<div class="gtco-widget">
+						<h3>서울에서 배빵빵</h3>
+					</div>
+					<div class="gtco-widget">
+						<h3>Get Social</h3>
+						<ul class="gtco-social-icons">
+							<li><a href="#"><i class="icon-twitter"></i></a></li>
+							<li><a href="#"><i class="icon-facebook"></i></a></li>
+							<li><a href="#"><i class="icon-linkedin"></i></a></li>
+							<li><a href="#"><i class="icon-dribbble"></i></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-md-12 text-center copyright">
+					Made by <i class="fa fa-love"></i><a href="https://bootstrapthemes.co">최현식,이혁주,정소영,박성준,심경외</a>
+				</div>
+>>>>>>> Stashed changes
+
+			</div>
+		</div>
+	</footer>
+
+<<<<<<< Updated upstream
 					<!-- jQuery -->
 					<script src="/resources/js/jquery.min.js"></script>
 					<!-- jQuery Easing -->
@@ -534,6 +825,9 @@
 								['view', ['fullscreen', 'codeview', 'help']]
 							]
 						});
+=======
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+>>>>>>> Stashed changes
 
 					</script>
 
