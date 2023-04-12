@@ -16,7 +16,6 @@
 		<![CDATA[
 			SELECT * 
 			FROM board 
-			WHERE bpid IS NULL
 			ORDER BY bid 
 			DESC
 		]]>
@@ -82,11 +81,11 @@
 			]]>
 	</delete>
 	
-	<update id="update_review" parameterType="hashMap">
+	<update id="update_review" parameterType="com.spring.board.Comment">
 		<![CDATA[
 			 UPDATE comment 
-        	 SET ccontent = #{ccontent}, 
-       		 WHERE bid = #{bid} 
+        	 SET ccontent = #{ccontent} 
+       		 WHERE cid = #{cid} 
 		]]>
 
 	</update>
