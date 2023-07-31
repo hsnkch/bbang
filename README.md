@@ -131,14 +131,20 @@
   <img src="https://github.com/hsnkch/bbang/assets/111720919/ef415dae-886b-4fff-ae15-74e676e838ae">
 </p>
 
-- ### 맛집 상세보기
+- ### 맛집 상세보기 및 리뷰
 <p align="center">
-  <img src="https://github.com/hsnkch/bbang/assets/111720919/df7ce7b2-100f-43fc-b4c0-8406cdeada44">
+  <img src="https://github.com/hsnkch/bbang/assets/111720919/130d4784-b1f9-4cf0-8572-a4050ed67ba8">
 </p>
 
-- ### 사이트 소개 및 게시판
+- ### 공지사항
+
 <p align="center">
-  <img src="https://github.com/hsnkch/bbang/assets/111720919/8b5cb9a0-a961-492a-a81f-c29b784a3576">
+  <img src="https://github.com/hsnkch/bbang/assets/111720919/15a59ecf-5e41-4760-a46d-db47142d36be">
 </p>
 
+- ### 자유게시판
+ 
+<p align="center">
+  <img src="https://github.com/hsnkch/bbang/assets/111720919/d03ba17c-ecfa-4486-9308-b98c964b3e37">
+</p> 
 
