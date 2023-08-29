@@ -66,12 +66,8 @@
 <a href="https://tomcat.apache.org" target="_blank">
   <img src="https://img.shields.io/badge/-Apache%20Tomcat-F8DC75?style=for-the-badge&logo=apache%20tomcat&logoColor=black" alt="Apache Tomcat">
 </a>
-<br>
 <a href="https://mybatis.org/mybatis-3/" target="_blank">
   <img src="https://img.shields.io/badge/-MyBatis-E34F26?style=for-the-badge&logo=MyBatis&logoColor=white" alt="MyBatis">
-</a>
-<a href="https://www.mysql.com" target="_blank">
-  <img src="https://img.shields.io/badge/-MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
 </a>
 
 #### 🔨 dev tool
@@ -87,6 +83,7 @@
 
 #### ⛓️ API
 - 카카오맵 API (https://apis.map.kakao.com/)
+- 구글 메일 API (https://developers.google.com/)
 - 공공 데이터 포털 (https://www.data.go.kr/)
 <br><br>
 
@@ -98,6 +95,7 @@
 ### 💡 회원
 - Spring Security를 이용한 인증 및 사용자 역할에 따른 인가 방식을 기본 세션 & 쿠키 방식을 이용해 구현했습니다.
 - 사용자의 역할은 관리자와 회원으로 구분했습니다.
+- 회원가입시 등록한 이메일로 환영 메일이 전송되도록 구글 메일 API를 통해 구현했습니다.
 
 ### 💡 자유게시판
 - 같이 맛집을 갈 사람을 모집하는 등 다양한 목적에 따라 회원이 글을 작성할 수 있는 게시판입니다.
@@ -106,7 +104,7 @@
 - 관리자가 사이트에 대한 소개 글이나 공지사항을 작성할 수 있는 게시판입니다.
 
 ### 💡 맛집 리스트
-- 공공데이터 포털을 이용해 서울에서 영업 신고된 제과점들을 데이터베이스에 등록해 이를 나타냅니다.
+- 공공데이터 포털을 활용해 서울에서 영업 신고된 제과점들을 데이터베이스에 등록해 이를 나타냅니다.
 - MyBatis의 동적 쿼리문을 이용해 검색 기능을 구현했습니다.
 
 ### 💡 맛집 상세보기
